@@ -1,113 +1,201 @@
-import Image from 'next/image'
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { task } from "./components/listitem";
+import ListItem from "./components/listitem";
+import { deleteAllTasks } from "./components/clearlist";
+
 
 export default function Home() {
+  const [tasks, setTasks] = useState<task[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [filterMode, setFilterMode] = useState<string>("all");
+
+  const date = new Date();
+  const strDate = date.toISOString();
+  
+  const deleteCompletedTasks = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/tasks/delete-completed', {
+        method: 'POST',
+      });
+  
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data.message);
+        getTasks() 
+      } else {
+        const errorData = await response.json();
+        console.error('Error:', errorData.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+
+  const handleDeleteTask = (taskIdToDelete: number) => {
+    const updatedTasks = tasks.filter(
+      (task) => task.task_id !== taskIdToDelete
+    );
+    setTasks(updatedTasks);
+  };
+
+  const addTask = () => {
+    const task: task = {
+      dt: strDate,
+      task_id: Math.floor(Math.random() * 1000000),
+      title: inputValue,
+      description: "This is a new task",
+      is_completed: false,
+    };
+
+    fetch("http://127.0.0.1:5000/api/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(task),
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          return response.json();
+        }
+        throw new Error("Failed to add task");
+      })
+      .then(() => {
+        setInputValue("");
+        getTasks();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const getTasks = () => {
+    fetch("http://127.0.0.1:5000/api/tasks")
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        throw new Error("Failed to fetch tasks");
+      })
+      .then((data) => {
+        data.sort(
+          (a: any, b: any) =>
+            new Date(a.dt).getTime() - new Date(b.dt).getTime()
+        );
+
+        setTasks(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    getTasks();
+  }, []);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    addTask();
+  }
+
+  const handleCheckboxChange = () => {
+    getTasks()
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    if (filterMode === "all") {
+      return true;
+    } else if (filterMode === "active") {
+      return !task.is_completed;
+    } else if (filterMode === "completed") {
+      return task.is_completed;
+    }
+    return false;
+  });
+
+  const handleFilterChange = (newFilter: string) => {
+    setFilterMode(newFilter);
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="w-full h-[100vh]">
+      <div className="flex justify-end flex-col items-center h-1/2 w-full">
+        <h1 className="relative row justify-self-start h-12">To-do list</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="w-full flex justify-center items-center"
+        >
+          <input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            className="w-2/3 md:w-1/2 lg:w-1/4 border-2 border-gray-400"
+            type="text"
+            placeholder="What would you like to add?"
+          />
+          <button className="ml-4">Add</button>
+        </form>
+        <div className="w-full flex justify-center items-center relative justify-self-end h-1/3 mt-12">
+          <button
+            className={`ml-4 border-2 h-10 w-10 ${
+              filterMode === "all" ? "bg-gray-200" : ""
+            }`}
+            onClick={() => handleFilterChange("all")}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            all
+          </button>
+          <button
+            className={`ml-4 border-2 h-10 w-16 ${
+              filterMode === "active" ? "bg-gray-200" : ""
+            }`}
+            onClick={() => handleFilterChange("active")}
+          >
+            active
+          </button>
+          <button
+            className={`ml-4 border-2 h-10 w-24 ${
+              filterMode === "completed" ? "bg-gray-200" : ""
+            }`}
+            onClick={() => handleFilterChange("completed")}
+          >
+            completed
+          </button>
+          <button className="ml-4 text-[12px] flex items-end h-10"
+            onClick={() => {
+              deleteAllTasks(), setTasks([]);
+            }}
+          >
+            clear list
+          </button>
+          <button className="ml-4 text-[12px] flex items-end h-10"
+            onClick={() => {
+              deleteCompletedTasks(), getTasks(), setTasks(tasks);
+            }}
+          >
+            clear completed
+          </button>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className="flex justify-center w-full ">
+        <ul className="w-2/3 flex flex-col md:items-center md:w-full lg:w-1/2">
+          {Array.isArray(filteredTasks) && filteredTasks.length > 0 ? (
+            filteredTasks.map((task) => (
+              <ListItem
+                prop={task}
+                key={task.task_id}
+                onDeleteTask={handleDeleteTask}
+                onCheckboxChange={handleCheckboxChange}
+              />
+            ))
+          ) : (
+            <li key={1}></li>
+          )}
+        </ul>
       </div>
     </main>
-  )
+  );
 }
