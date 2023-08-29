@@ -17,7 +17,7 @@ export default function Home() {
   
   const deleteCompletedTasks = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/tasks/delete-completed', {
+      const response = await fetch('http://54.224.242.141:5000/api/tasks/delete-completed', {
         method: 'POST',
       });
   
@@ -51,7 +51,7 @@ export default function Home() {
       is_completed: false,
     };
 
-    fetch("http://127.0.0.1:5000/api/tasks", {
+    fetch("http://54.224.242.141:5000/api/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export default function Home() {
   };
 
   const getTasks = () => {
-    fetch("http://127.0.0.1:5000/api/tasks")
+    fetch("http://54.224.242.141:5000/api/tasks")
       .then((response) => {
         if (response.status === 200) {
           return response.json();

@@ -2,7 +2,7 @@ import React from 'react'
 
 export const deleteAllTasks = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/tasks/delete-all', {
+      const response = await fetch('http://54.224.242.141:5000/api/tasks/delete-all', {
         method: 'POST',
       });
   

@@ -25,7 +25,7 @@ export default function ListItem ({ prop, onDeleteTask, onCheckboxChange }: task
 
         setIsChecked(!isChecked)       
     
-        fetch(`http://127.0.0.1:5000/api/tasks/${prop.task_id}`, {
+        fetch(`http://54.224.242.141:5000/api/tasks/${prop.task_id}`, {
             method: 'PUT',
             headers: {
                         'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export default function ListItem ({ prop, onDeleteTask, onCheckboxChange }: task
           });
       }
       const handleDelete = () => {
-        fetch(`http://127.0.0.1:5000/api/tasks/${prop.task_id}`, {
+        fetch(`http://54.224.242.141:5000/api/tasks/${prop.task_id}`, {
           method: 'DELETE'
         })
           .then((response) => {
