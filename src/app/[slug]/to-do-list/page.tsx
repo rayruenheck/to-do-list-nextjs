@@ -2,38 +2,63 @@
 
 import { useEffect, useState } from "react";
 
-import { task } from "./components/listitem";
-import ListItem from "./components/listitem";
-import { deleteAllTasks } from "./components/clearlist";
+import { task } from "../../components/listitem";
+import ListItem from "../../components/listitem";
+import { deleteAllTasks } from "../../components/clearlist";
 
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [tasks, setTasks] = useState<task[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [filterMode, setFilterMode] = useState<string>("all");
+  const router = useRouter()
 
   const date = new Date();
   const strDate = date.toISOString();
+
   
-  const deleteCompletedTasks = async () => {
+
+  const handleLogout = async () => {
     try {
-      const response = await fetch('http://54.224.242.141:5000/api/tasks/delete-completed', {
+      const response = await fetch('http://127.0.0.1:5000/api/logout', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
       });
   
       if (response.status === 200) {
-        const data = await response.json();
-        console.log(data.message);
-        getTasks() 
-      } else {
-        const errorData = await response.json();
-        console.error('Error:', errorData.error);
-      }
+        router.push('/login');
+      } 
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error logging out:', error);
+      alert('An error occurred during logout');
     }
   };
 
+  const deleteCompletedTasks = async () => {
+    try {
+      const response = await fetch(
+        "http://54.224.242.141:5000/api/tasks/delete-completed",
+        {
+          method: "POST",
+        }
+      );
+
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data.message);
+        getTasks();
+      } else {
+        const errorData = await response.json();
+        console.error("Error:", errorData.error);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleDeleteTask = (taskIdToDelete: number) => {
     const updatedTasks = tasks.filter(
@@ -104,7 +129,7 @@ export default function Home() {
   }
 
   const handleCheckboxChange = () => {
-    getTasks()
+    getTasks();
   };
 
   const filteredTasks = tasks.filter((task) => {
@@ -164,14 +189,16 @@ export default function Home() {
           >
             completed
           </button>
-          <button className="ml-4 text-[12px] flex items-end h-10"
+          <button
+            className="ml-4 text-[12px] flex items-end h-10"
             onClick={() => {
               deleteAllTasks(), setTasks([]);
             }}
           >
             clear list
           </button>
-          <button className="ml-4 text-[12px] flex items-end h-10"
+          <button
+            className="ml-4 text-[12px] flex items-end h-10"
             onClick={() => {
               deleteCompletedTasks(), getTasks(), setTasks(tasks);
             }}
@@ -196,6 +223,7 @@ export default function Home() {
           )}
         </ul>
       </div>
+      <button onClick={()=>{handleLogout()}}>Logout</button>
     </main>
   );
 }
