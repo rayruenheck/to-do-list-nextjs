@@ -17,7 +17,7 @@ export default function Page() {
     };
 
     
-      const response = await fetch('http://52.90.245.69:5000/api/register-user', {
+      const response = await fetch('https://52.90.245.69:5000/api/register-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -26,7 +26,7 @@ export default function ToDoListPage() {
       localStorage.removeItem('access_token');
       localStorage.removeItem('user_id')
   
-      const response = await fetch('http://52.90.245.69:5000/api/logout', {
+      const response = await fetch('https://52.90.245.69:5000/api/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export default function ToDoListPage() {
   const deleteCompletedTasks = async () => {
     try {
       const response = await fetch(
-        "http://52.90.245.69:5000/api/tasks/delete-completed",
+        "https://52.90.245.69:5000/api/tasks/delete-completed",
         {
           method: "POST",
         }
@@ -80,7 +80,7 @@ export default function ToDoListPage() {
       user_id: localStorage.getItem('user_id') || ''
     };
 
-    fetch("http://52.90.245.69:5000/api/tasks", {
+    fetch("https://52.90.245.69:5000/api/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export default function ToDoListPage() {
   };
 
   const getTasks = () => {
-    fetch(`http://52.90.245.69:5000/api/tasks?user_id=${user_id}`)
+    fetch(`https://52.90.245.69:5000/api/tasks?user_id=${user_id}`)
       .then((response) => {
         if (response.status === 200) {
           return response.json();
