@@ -7,7 +7,7 @@ import { useState } from 'react'
 export default function page() {
 
     
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter()
 
@@ -25,7 +25,7 @@ export default function page() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            'username' : username,
+            'email' : email,
             'password' : password
         }),
         credentials: 'include'
@@ -49,12 +49,12 @@ export default function page() {
           <div>Login</div>
 
           <input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className='border-2 mb-4'
             type='text'
-            name='username'
-            placeholder='Username'
+            name='email'
+            placeholder='Email'
           />
           <input
             value={password}
