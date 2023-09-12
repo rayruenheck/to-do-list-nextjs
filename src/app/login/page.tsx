@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react'
 
 
-export default function page() {
+export default function LoginPage() {
 
     
   const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ export default function page() {
     
 
     
-      const response = await fetch('http://127.0.0.1:5000/api/login-users', {
+      const response = await fetch('http://52.90.245.69:5000/api/login-users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,9 +33,20 @@ export default function page() {
 
       if (response.status === 200) {
         const data = await response.json()
+        const accessToken = data.access_token
+        localStorage.setItem('access_token', accessToken)
+        localStorage.setItem('user_id', data.user_id )
         const loggedInUsername = data.username
         alert(`User ${loggedInUsername} logged in`);
-        router.push(`/${loggedInUsername}/to-do-list`)
+
+        const token = localStorage.getItem('access_token')
+        if (!token) {
+          alert('Please log in first.');
+          return;
+        }
+      
+        
+        router.push(`/${data.username}/to-do-list`);
       }  else {
         alert('user not logged in');
       }
@@ -45,6 +56,9 @@ export default function page() {
   
     return (
         <div className='h-[100vh] w-full flex justify-center items-center flex-col'>
+          <div>dont have an account?</div>
+          <a href="/register"> Register Here</a>
+          <div> or try email: demo@demo.com password: 123</div>
         <form onSubmit={handleLogin} className='h-1/2 w-3/4 flex flex-col justify-center items-center border-2'>
           <div>Login</div>
 
