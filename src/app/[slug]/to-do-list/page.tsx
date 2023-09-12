@@ -5,7 +5,7 @@ import ToDoListPage from "@/app/components/todolistpage";
 
 
 
-export default function Home() {
+export default function ToDoList() {
   
 
   return (

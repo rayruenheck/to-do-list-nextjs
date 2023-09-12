@@ -34,7 +34,7 @@ export default function ToDoListPage() {
       });
   
       if (response.status === 200) {
-        router.push('/login');
+        router.push('/');
       } 
     } catch (error) {
       console.error('Error logging out:', error);
