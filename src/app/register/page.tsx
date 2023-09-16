@@ -16,7 +16,7 @@ export default function Page() {
     };
 
     
-      const response = await fetch('https://www.raytodolistapi.com/api/register-user', {
+      const response = await fetch('https://raytodolistapi.com/api/register-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

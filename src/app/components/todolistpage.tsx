@@ -26,7 +26,7 @@ export default function ToDoListPage() {
       localStorage.removeItem('access_token');
       localStorage.removeItem('user_id')
   
-      const response = await fetch('https://www.raytodolistapi.com/api/logout', {
+      const response = await fetch('https://raytodolistapi.com/api/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export default function ToDoListPage() {
   const deleteCompletedTasks = async () => {
     try {
       const response = await fetch(
-        "https://www.raytodolistapi.com/api/tasks/delete-completed",
+        "https://raytodolistapi.com/api/tasks/delete-completed",
         {
           method: "POST",
         }
@@ -80,7 +80,7 @@ export default function ToDoListPage() {
       user_id: localStorage.getItem('user_id') || ''
     };
 
-    fetch("https://www.raytodolistapi.com/api/tasks", {
+    fetch("https://raytodolistapi.com/api/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export default function ToDoListPage() {
   };
 
   const getTasks = () => {
-    fetch(`https://www.raytodolistapi.com/api/tasks?user_id=${user_id}`)
+    fetch(`https://raytodolistapi.com/api/tasks?user_id=${user_id}`)
       .then((response) => {
         if (response.status === 200) {
           return response.json();
