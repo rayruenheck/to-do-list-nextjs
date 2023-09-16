@@ -9,7 +9,7 @@ function ProtectedRouteWrapper({ children }: { children: React.ReactNode }) {
 
     if (!accessToken) {
      
-      router.push('/login');
+      router.push('/');
     }
   }, [router]);
 

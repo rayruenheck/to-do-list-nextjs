@@ -3,7 +3,7 @@ import React from 'react'
 export const deleteAllTasks = async () => {
   const user_id = localStorage.getItem('user_id')
     try {
-      const response = await fetch(`https://52.90.245.69:5000/api/tasks/delete-all?user_id=${user_id}`, {
+      const response = await fetch(`http://www.raytodolistapi.com/api/tasks/delete-all?user_id=${user_id}`, {
         method: 'POST',
       });
   

@@ -10,14 +10,13 @@ export default function Page() {
     e.preventDefault(); // Prevent the default form submission behavior
 
     const user = {
-      user_id: Math.floor(Math.random() * 1000000),
       email: email,
       username: username,
       password: password,
     };
 
     
-      const response = await fetch('https://52.90.245.69:5000/api/register-user', {
+      const response = await fetch('http://www.raytodolistapi.com/api/register-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

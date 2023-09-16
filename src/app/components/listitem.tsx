@@ -26,7 +26,7 @@ export default function ListItem ({ prop, onDeleteTask, onCheckboxChange }: task
 
         setIsChecked(!isChecked)       
     
-        fetch(`https://52.90.245.69:5000/api/tasks/${prop.task_id}`, {
+        fetch(`http://www.raytodolistapi.com/api/tasks/${prop.task_id}`, {
             method: 'PUT',
             headers: {
                         'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export default function ListItem ({ prop, onDeleteTask, onCheckboxChange }: task
           });
       }
       const handleDelete = () => {
-        fetch(`https://52.90.245.69:5000/api/tasks/${prop.task_id}`, {
+        fetch(`http://www.raytodolistapi.com/api/tasks/${prop.task_id}`, {
           method: 'DELETE'
         })
           .then((response) => {

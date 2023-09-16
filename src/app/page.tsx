@@ -19,7 +19,7 @@ export default function Home() {
     
 
     
-      const response = await fetch('https://52.90.245.69:5000/api/login-users', {
+      const response = await fetch('http://www.raytodolistapi.com/api/login-users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
