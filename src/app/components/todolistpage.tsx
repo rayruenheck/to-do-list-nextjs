@@ -153,6 +153,7 @@ export default function ToDoListPage() {
 
   return (
     <main className="w-full h-[100vh]">
+      <button className="flex m-[50px]" onClick={()=>{handleLogout()}}>Logout</button>
       <div className="flex justify-end flex-col items-center h-1/2 w-full">
         <h1 className="relative row justify-self-start h-12">To-do list</h1>
         <form
@@ -227,7 +228,7 @@ export default function ToDoListPage() {
           )}
         </ul>
       </div>
-      <button onClick={()=>{handleLogout()}}>Logout</button>
+      
     </main>
   );
 }

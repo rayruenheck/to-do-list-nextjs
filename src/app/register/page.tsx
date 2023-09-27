@@ -35,7 +35,7 @@ export default function Page() {
 
   return (
     <div className='h-[100vh] w-full flex justify-center items-center flex-col'>
-      <form onSubmit={handleRegister} className='h-1/2 w-3/4 flex flex-col justify-center items-center border-2'>
+      <form onSubmit={handleRegister} className='h-1/2 w-3/4 md:w-1/2 rounded-md shadow-md flex flex-col justify-center items-center border-2'>
         <div>Register</div>
         <input
           value={email}
@@ -61,7 +61,7 @@ export default function Page() {
           name='password'
           placeholder='Password'
         />
-        <button className='border-2 w-1/2 bg-blue-400' type='submit'>
+        <button className='border-2 w-[150px] rounded-md bg-blue-400' type='submit'>
           Register
         </button>
       </form>

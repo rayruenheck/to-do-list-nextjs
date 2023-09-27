@@ -55,33 +55,40 @@ export default function Home() {
   
   
     return (
-        <div className='h-[100vh] w-full flex justify-center items-center flex-col'>
-          <div>dont have an account?</div>
-          <a href="/register"> Register Here</a>
-          <div> or try email: demo@demo.com password: 123</div>
-        <form onSubmit={handleLogin} className='h-1/2 w-3/4 flex flex-col justify-center items-center border-2'>
-          <div>Login</div>
-
+      
+        
+        <div className='m-5 h-[100vh] w-full flex justify-center items-center '>
+          
+        <form onSubmit={handleLogin} className='flex justify-center w-4/5 h-4/5 md:h-3/5 md:w-3/5 flex-col items-center border-2 lg:w-1/3 lg:h-3/4 bg-white rounded-md shadow-md'>
+          <div className='h-1/5 text-[40px]'>Welcome</div>
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className='border-2 mb-4'
+            className='border-2 md:h-[75px] rounded-md w-2/3 border-gray-400 mb-8 bg-white md:placeholder:text-[30px]'
             type='text'
             name='email'
-            placeholder='Email'
+            placeholder='demo@demo.com'
+            required
           />
           <input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className='border-2 mb-4'
+            className='md:placeholder:text-[30px] md:h-[75px] border-2 rounded-md w-2/3 border-gray-400 mb-8 bg-white'
             type='password'
             name='password'
-            placeholder='Password'
+            placeholder='123'
+            required
           />
-          <button className='border-2 w-1/2 bg-blue-400' type='submit'>
+          <div className=' flex  mb-8 w-2/3 justify-between'>
+          <div className='text-sm'>dont have an account?</div>
+          <a href="/register" className='text-sm text-blue-4600 font-bold '> Register Here</a> 
+          </div>
+          <button className='border-2 w-2/3  md:h-[75px] bg-blue-400 rounded-2xl' type='submit'>
             Login
           </button>
         </form>
-      </div>
+        </div>
+      
+      
   )
 }
