@@ -10,8 +10,8 @@ export default function Page() {
     e.preventDefault(); // Prevent the default form submission behavior
 
     const user = {
-      email: email,
-      username: username,
+      email: email.toLowerCase(),
+      username: username.toLowerCase(),
       password: password,
     };
 
