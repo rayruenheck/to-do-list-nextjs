@@ -77,7 +77,7 @@ export default function Home() {
           required
         />
         <div className='flex justify-between items-center mb-6'>
-          <span className='text-sm text-gray-600'>Don't have an account?</span>
+          <span className='text-sm text-gray-600'>Don&apos;t have an account?</span>
           <a href="/register" className='text-sm text-blue-600 font-semibold hover:text-blue-800'>Register Here</a>
         </div>
         <button className='w-full p-3 bg-blue-500 text-white text-lg rounded hover:bg-blue-600' type='submit'>
