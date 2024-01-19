@@ -152,83 +152,46 @@ export default function ToDoListPage() {
   };
 
   return (
-    <main className="w-full h-[100vh]">
-      <button className="flex m-[50px]" onClick={()=>{handleLogout()}}>Logout</button>
-      <div className="flex justify-end flex-col items-center h-1/2 w-full">
-        <h1 className="relative row justify-self-start h-12">To-do list</h1>
-        <form
-          onSubmit={handleSubmit}
-          className="w-full flex justify-center items-center"
-        >
+    <main className="flex flex-col w-full h-screen bg-gray-100">
+      <header className="flex justify-between items-center w-full p-4 bg-white shadow-md">
+        <h1 className="text-xl font-bold">To-do List</h1>
+        <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Logout</button>
+      </header>
+      <div className="flex flex-col items-center justify-start flex-1 p-4">
+        <form onSubmit={handleSubmit} className="flex items-center w-full max-w-2xl mb-4">
           <input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="w-2/3 md:w-1/2 lg:w-1/4 border-2 border-gray-400"
+            className="flex-1 p-2 border border-gray-300 rounded shadow-sm"
             type="text"
             placeholder="What would you like to add?"
           />
-          <button className="ml-4">Add</button>
+          <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add</button>
         </form>
-        <div className="w-full flex justify-center items-center relative justify-self-end h-1/3 mt-12">
-          <button
-            className={`ml-4 border-2 h-10 w-10 ${
-              filterMode === "all" ? "bg-gray-200" : ""
-            }`}
-            onClick={() => handleFilterChange("all")}
-          >
-            all
-          </button>
-          <button
-            className={`ml-4 border-2 h-10 w-16 ${
-              filterMode === "active" ? "bg-gray-200" : ""
-            }`}
-            onClick={() => handleFilterChange("active")}
-          >
-            active
-          </button>
-          <button
-            className={`ml-4 border-2 h-10 w-24 ${
-              filterMode === "completed" ? "bg-gray-200" : ""
-            }`}
-            onClick={() => handleFilterChange("completed")}
-          >
-            completed
-          </button>
-          <button
-            className="ml-4 text-[12px] flex items-end h-10"
-            onClick={() => {
-              deleteAllTasks(), setTasks([]);
-            }}
-          >
-            clear list
-          </button>
-          <button
-            className="ml-4 text-[12px] flex items-end h-10"
-            onClick={() => {
-              deleteCompletedTasks(), getTasks(), setTasks(tasks);
-            }}
-          >
-            clear completed
-          </button>
+        <div className="flex space-x-2 mb-4">
+          {['all', 'active', 'completed'].map(mode => (
+            <button
+              key={mode}
+              onClick={() => handleFilterChange(mode)}
+              className={`px-3 py-1 border ${filterMode === mode ? 'bg-blue-500 text-white' : 'bg-white'} rounded hover:bg-blue-600 hover:text-white`}
+            >
+              {mode}
+            </button>
+          ))}
+          <button onClick={deleteAllTasks} className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Clear List</button>
+          <button onClick={deleteCompletedTasks} className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Clear Completed</button>
         </div>
-      </div>
-      <div className="flex justify-center w-full ">
-        <ul className="w-2/3 flex flex-col md:items-center md:w-full lg:w-1/2">
-          {Array.isArray(filteredTasks) && filteredTasks.length > 0 ? (
-            filteredTasks.map((task) => (
-              <ListItem
-                prop={task}
-                key={task.task_id}
-                onDeleteTask={handleDeleteTask}
-                onCheckboxChange={handleCheckboxChange}
-              />
-            ))
-          ) : (
-            <li key={1}></li>
-          )}
+        <ul className="w-full max-w-2xl space-y-2">
+          {filteredTasks.map((task) => (
+            <ListItem
+              key={task.task_id}
+              prop={task}
+              onDeleteTask={handleDeleteTask}
+              onCheckboxChange={handleCheckboxChange}
+            />
+          ))}
         </ul>
       </div>
-      
     </main>
   );
 }

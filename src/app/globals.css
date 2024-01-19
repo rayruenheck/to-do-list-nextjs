@@ -2,3 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+.checkbox-custom {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #555;
+    border-radius: 3px;
+    position: relative;
+  }
+  
+  .checkbox-custom.checked::before {
+    content: '✔';
+    color: green;
+    position: absolute;
+    top: -4px;
+    left: 0px;
+  }
